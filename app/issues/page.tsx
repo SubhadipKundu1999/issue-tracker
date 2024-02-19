@@ -1,16 +1,53 @@
+
 import React from 'react'
-import {Button } from '@radix-ui/themes';
-import { FaPlus } from "react-icons/fa6";
+import {Table } from '@radix-ui/themes';
+
 import Link from 'next/link';
-function page() {
+import Prisma  from "../../prisma/client"
+import IssueStatusBadge from '../components/issueStatusBadge';
+import delay from 'delay'
+import IssueActionComponent from './IssueActionComponent';
+async function  page() {
+
+  const issues = await Prisma.issue.findMany();
+  await delay(2000);
+
   return (
-    <div className='p-5'>
-<Link href={"/issues/new"}> 
-<Button variant='solid' className='hover:cursor-pointer text-xl'>
- <FaPlus size={20} /> New Issue
- </Button>
- </Link>
-    </div>
+<div>
+<div className='p-5'>
+<IssueActionComponent/>
+</div>
+<div className='p-5'>
+
+<Table.Root variant='surface' >
+  <Table.Header>
+    <Table.Row align={'end'}>
+      <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
+      <Table.ColumnHeaderCell className='hidden md:table-cell'>Satus</Table.ColumnHeaderCell>
+      <Table.ColumnHeaderCell className='hidden md:table-cell'>Created At</Table.ColumnHeaderCell>
+    </Table.Row>
+  </Table.Header>
+
+  <Table.Body>
+    {issues && issues.map((issue)=>
+
+<Table.Row key ={issue.id}>
+<Table.Cell>{issue.title} <div className='block md:hidden'><IssueStatusBadge status={issue.status}/></div></Table.Cell>
+<Table.Cell className='hidden md:table-cell'><IssueStatusBadge status={issue.status}/></Table.Cell>
+<Table.Cell className='hidden md:table-cell'>{issue.createdAt.toDateString()}</Table.Cell>
+</Table.Row>
+    )}
+  
+
+  </Table.Body>
+</Table.Root>
+     </div>
+
+   </div>
+
+    
+
+
   )
 }
 

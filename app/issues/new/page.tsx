@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createIssueSchema } from '@/app/validation'
 import {z} from "zod";
+import ErrorComponent from '@/app/components/ErrorComponent';
+import Spinner from '@/app/components/Spinner';
 
 /*
 interface  IssueForm{
@@ -23,6 +25,7 @@ type IssueForm = z.infer<typeof createIssueSchema>;
 
 function NewIssuepage() {
   const [error, setError]= useState("")
+  const [isSubmiting, setIsSubmiting] = useState(false)
   const router = useRouter();
 
 const { register, control, handleSubmit,formState: { errors } }= 
@@ -32,11 +35,12 @@ const { register, control, handleSubmit,formState: { errors } }=
 
 async function onSubmit(data:IssueForm){
   try {
-
+    setIsSubmiting(true);
     await  axios.post("/api/issues", data);
     router.push("/");
     
   } catch (error) {
+    setIsSubmiting(false);
     setError("An Unexpected Error occured");
   }
   
@@ -57,7 +61,9 @@ async function onSubmit(data:IssueForm){
         <TextField.Root>
             <TextField.Input placeholder="title..." {...register('title')} />
           </TextField.Root>
-          <p className='text-red-400'>{errors.title?.message}</p>
+          <ErrorComponent>
+            {errors.title?.message}
+          </ErrorComponent>
         </div>
         <div>
           <Controller
@@ -66,10 +72,14 @@ async function onSubmit(data:IssueForm){
           render ={({field})=>(
             <SimpleMDE placeholder='Description' {...field}/> 
           )} />
-          <p className='text-red-400' >{errors.description?.message}</p>
+          <ErrorComponent>
+            {errors.description?.message}
+          </ErrorComponent>
         </div>
-        
-        <Button className='hover:cursor-pointer'> Submit New Issue </Button>
+        <Button className='hover:cursor-pointer'>
+          {isSubmiting && <Spinner/>}Submit New Issue
+          
+         </Button>
       </div>
     </form> 
 
