@@ -1,5 +1,5 @@
 import { Table } from '@radix-ui/themes'
-import React from 'react'  
+import React from 'react'   
 import IssueActionComponent from './IssueActionComponent';
 const array =[1,2,3,4,5,6,7,8];
 
