@@ -1,12 +1,9 @@
-import { Box, Button, Card, Flex, Grid, Heading, Text } from '@radix-ui/themes'
+import { Box, Button, Flex, Grid } from '@radix-ui/themes'
 import  Prisma  from '../../../prisma/client'
 import React from 'react'
-import Markdown from 'react-markdown'
-import IssueStatusBadge from '@/app/components/IssueStatusBadge'
-import delay from 'delay'
-import { FaRegEdit } from "react-icons/fa";
 import EditIssueButton from './EditIssueButton'
 import IssueDetails from './IssueDetails'
+import DeleteIssueButton from './DeleteIssueButton'
 interface Props{
     params:{
         id:string
@@ -21,12 +18,15 @@ async function IssueDetailsPage({params:{id}}: Props) {
     })
 
   return (
-    <Grid columns={{initial:"1", md:"2"}} className='p-5 mt-10 prose min-w-full gap-5'>
-        <Box className='min-w-full'> 
+    <Grid columns={{initial:"1", sm:"5"}} className='p-5 mt-10 prose min-w-full gap-5'>
+        <Box  className='md:col-span-4'> 
              { issueDetails  &&  <IssueDetails issueDetails={issueDetails}/> }
         </Box>
-        <Box>
+        <Box className='w-full'>
+            <Flex gap={"2"} direction={"column"} >
             <EditIssueButton issueid={issueDetails!.id}/>
+            <DeleteIssueButton issueid={issueDetails!.id}/>
+            </Flex>
         </Box>
     </Grid> 
    

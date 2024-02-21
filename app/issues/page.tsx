@@ -4,7 +4,7 @@ import {Table } from '@radix-ui/themes';
 
 import Link from '../components/Link';
 import Prisma  from "../../prisma/client"
-import IssueStatusBadge from '../components/issueStatusBadge';
+import IssueStatusBadge from '../components/IssueStatusBadge';
 import delay from 'delay'
 import IssueActionComponent from './IssueActionComponent';
 async function  page() {
@@ -45,10 +45,9 @@ async function  page() {
 
    </div>
 
-    
-
-
   )
 }
+
+export const dynamic ="force-dynamic"
 
 export default page
