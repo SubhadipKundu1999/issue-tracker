@@ -2,24 +2,21 @@
 
 import {  Button, Callout, TextField } from '@radix-ui/themes'
 import React, { useState } from 'react'
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios'
 import { useRouter } from 'next/navigation';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createIssueSchema } from '@/app/validation'
+import { IssueSchema } from '@/app/validation'
 import {z} from "zod";
 import ErrorComponent from '@/app/components/ErrorComponent';
 import Spinner from '@/app/components/Spinner';
 import { Issue } from '@prisma/client';
+import SimpleMDE from 'react-simplemde-editor'
 
-type IssueForm = z.infer<typeof createIssueSchema>;
 
+type IssueForm = z.infer<typeof IssueSchema>;
 
-interface Props{
-    issue?  : Issue
-}
 function IssueForm({ issue }:{ issue? : Issue}) {
   const [error, setError]= useState("")
   const [isSubmiting, setIsSubmiting] = useState(false)
@@ -27,22 +24,23 @@ function IssueForm({ issue }:{ issue? : Issue}) {
 
 const { register, control, handleSubmit,formState: { errors } }= 
       useForm<IssueForm>(
-        {resolver: zodResolver(createIssueSchema)}
+        {resolver: zodResolver(IssueSchema)}
         );
 
-async function onSubmit(data:IssueForm){
+async function onSubmit(data:IssueForm){ 
   try {
     setIsSubmiting(true);
+    if(issue)
+         await axios.patch(`/api/issues/${issue.id}`, data);
+    else    
     await  axios.post("/api/issues", data);
-    router.push("/");
+    router.push("/issues");
     
   } catch (error) {
     setIsSubmiting(false);
     setError("An Unexpected Error occured");
   }
-  
-  }
-
+}
   return (
     <div className='max-w-xl p-5'>
       {error &&  
@@ -75,7 +73,8 @@ async function onSubmit(data:IssueForm){
           </ErrorComponent>
         </div>
         <Button className='hover:cursor-pointer'>
-          {isSubmiting && <Spinner/>}Submit New Issue
+          {isSubmiting && <Spinner/>}
+          {issue?" Upadte issue": "Submit New Issue"}
           
          </Button>
       </div>
