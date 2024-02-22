@@ -1,4 +1,4 @@
-import { IssueSchema } from "@/app/validation";
+import { pathIssueSchema } from "@/app/validation";
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "../../../../prisma/client"
@@ -10,16 +10,43 @@ export async function PATCH(
     request: NextRequest,
     { params }: { params: { id: string } }) {
 
-    const session = await getServerSession(authOptions)
-    if (!session)
-        return NextResponse.json({}, { status: 401 })
-    const body = await request.json();
 
-    const validation = IssueSchema.safeParse(body);
+    //check any user is signed in or not    
+    // const session = await getServerSession(authOptions)
+    // if (!session)
+    //     return NextResponse.json({}, { status: 401 })
+
+    const body = await request.json();
+    console.log(body)
+
+    //check validation
+    const validation = pathIssueSchema.safeParse(body);
+
 
     if (!validation.success) {
         return NextResponse.json(validation.error.format(), { status: 400 })
     }
+
+    //destucturing
+    const { assignedToUserId, title, description } = body;
+
+    // check any userid present in request body.
+    if (assignedToUserId) {
+        const user = prisma.user.findUnique(
+            {
+                where: {
+                    id: assignedToUserId
+                }
+            }
+        )
+        if (!user)
+            return NextResponse.json(
+                { error: 'Invalid User' },
+                { status: 400 }
+            );
+    }
+
+    //check issue is valid or not
     const issue = await prisma?.issue.findUnique({
         where: {
             id: parseInt(params.id)
@@ -35,8 +62,9 @@ export async function PATCH(
             id: issue.id
         },
         data: {
-            title: body.title,
-            description: body.description
+            title,
+            description,
+            assignedToUserId
         }
     })
 
@@ -50,7 +78,7 @@ export async function DELETE(
     const session = await getServerSession(authOptions)
     if (!session)
         return NextResponse.json({}, { status: 401 })
-    const issue = await prisma?.issue.findUnique({
+    const issue = await prisma.issue.findUnique({
 
         where: {
             id: parseInt(params.id)
