@@ -6,6 +6,7 @@ import IssueDetails from './IssueDetails'
 import DeleteIssueButton from './DeleteIssueButton'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import AssigningIssues from './AssigningIssues'
 interface Props{
     params:{
         id:string
@@ -23,15 +24,18 @@ async function IssueDetailsPage({params:{id}}: Props) {
 
   return (
     <Grid columns={{initial:"1", sm:"5"}} className='p-5 mt-10 prose min-w-full gap-5'>
+        
         <Box  className='md:col-span-4'> 
              { issueDetails  &&  <IssueDetails issueDetails={issueDetails}/> }
         </Box>
+
         {session &&
         <Box className='w-full'>
             <Flex gap={"2"} direction={"column"} >
+                <AssigningIssues/>
             <EditIssueButton issueid={issueDetails!.id}/>
             <DeleteIssueButton issueid={issueDetails!.id}/>
-            </Flex>
+            </Flex> 
         </Box>
 }
     </Grid> 
