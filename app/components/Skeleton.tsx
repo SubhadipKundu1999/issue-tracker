@@ -4,7 +4,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 function Skeletons({...props}) {
   return (
-   <Skeleton {...props}/>
+   <Skeleton {...props} />
   )
 }
 
