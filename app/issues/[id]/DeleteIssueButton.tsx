@@ -32,7 +32,7 @@ function DeleteIssueButton({issueid}:{issueid: number}) {
 <AlertDialog.Root>
   <AlertDialog.Trigger>
     <Button color='red' className='hover:cursor-pointer' disabled={isDeleting}> 
-     {isDeleting && <Spinner/>} 
+     {isDeleting && <Spinner/> } 
       <MdDelete  color="white"/>
         <span  className='text-white'>  Delete Issue </span>
     </Button>
