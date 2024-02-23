@@ -32,7 +32,7 @@ async function IssueDetailsPage({params:{id}}: Props) {
         {session &&
         <Box className='w-full'>
             <Flex gap={"2"} direction={"column"} >
-                <AssigningIssues/>
+                <AssigningIssues issue={issueDetails!}/>
             <EditIssueButton issueid={issueDetails!.id}/>
             <DeleteIssueButton issueid={issueDetails!.id}/>
             </Flex> 
