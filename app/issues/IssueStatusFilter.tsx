@@ -32,7 +32,7 @@ function IssueStatusFilter() {
          <Select.Label>Status</Select.Label>
          {statuses.map((status)=>  
              <Select.Item 
-                key={status.value} 
+                key={status.label} 
                 value={status.value || "empty"}>
               {status.label}
               </Select.Item>)}
