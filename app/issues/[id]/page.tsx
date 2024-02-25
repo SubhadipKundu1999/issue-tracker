@@ -5,13 +5,15 @@ import EditIssueButton from './EditIssueButton'
 import IssueDetails from './IssueDetails'
 import DeleteIssueButton from './DeleteIssueButton'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import  authOptions from '../../auth/authOptions'
 import AssigningIssues from './AssigningIssues'
+import { cache } from 'react';
 interface Props{
     params:{
         id:string
     }
 }
+const fetchUser = cache((issueId: number) => Prisma.issue.findUnique({ where: { id: issueId }}));
 
 async function IssueDetailsPage({params:{id}}: Props) {
     const session = await getServerSession(authOptions);
@@ -42,5 +44,14 @@ async function IssueDetailsPage({params:{id}}: Props) {
    
   )
 }
+
+export async function generateMetadata({ params }: Props) {
+    const issue = await fetchUser(parseInt(params.id));
+  
+    return {
+      title: issue?.title,
+      description: 'Details of issue ' + issue?.id
+    }
+  }
 
 export default IssueDetailsPage

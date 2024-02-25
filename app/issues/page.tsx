@@ -7,6 +7,7 @@ import IssueStatusFilter from './IssueStatusFilter';
 import { Issue, Status } from '@prisma/client';
 import Pagination from '../components/Pagination';
 import IssueTable, {columnNames } from './_components/IssueTable';
+import { Metadata } from 'next';
 
 
 async function  page({searchParams}:{searchParams:{status: Status, orderBy:keyof Issue, page: string}}) {
@@ -58,5 +59,10 @@ async function  page({searchParams}:{searchParams:{status: Status, orderBy:keyof
 }
 
 export const dynamic ="force-dynamic"
+
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Issue List',
+  description: 'View all project issues'
+};
 
 export default page

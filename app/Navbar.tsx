@@ -1,6 +1,6 @@
 "use client"
   
-import Link from 'next/Link'
+import Link from 'next/link'
 import React from 'react'
 import classNames from 'classnames';
 import { FaBug } from "react-icons/fa";

@@ -4,12 +4,12 @@ import { Select } from '@radix-ui/themes'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
-const statuses:{label:String, value?: Status}[]=
+const statuses:{label:String, value?: Status, id:number}[]=
 [
-  {label:'ALL' },
-  { label:"OPEN", value:"OPEN"},
-  {label:"IN PROGRESS", value: "IN_PROGRESS"},
-  {label:"CLOSED", value:"CLOSED"}
+  {id:1,label:'ALL' },
+  { id:2,label:"OPEN", value:"OPEN"},
+  {id:3,label:"IN PROGRESS", value: "IN_PROGRESS"},
+  {id:4,label:"CLOSED", value:"CLOSED"}
 ]
 
 function IssueStatusFilter() {
@@ -32,7 +32,7 @@ function IssueStatusFilter() {
          <Select.Label>Status</Select.Label>
          {statuses.map((status)=>  
              <Select.Item 
-                key={status.label} 
+                key={status.id} 
                 value={status.value || "empty"}>
               {status.label}
               </Select.Item>)}

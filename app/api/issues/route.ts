@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { IssueSchema } from "../../validation"
 import prisma from "../../../prisma/client"
-import { authOptions } from "../auth/[...nextauth]/route";
+import authOptions from "../../auth/authOptions";
 import { getServerSession } from "next-auth";
 
 export async function POST(request: NextRequest) {
